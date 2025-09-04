@@ -1,102 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { AuthProvider } from '@/contexts/AuthContext';
-import { AppointmentProvider } from '@/contexts/AppointmentContext';
-import { ServiceProvider } from '@/contexts/ServiceContext';
-
-// Components
-import Login from '@/components/Login.tsx';
-import Layout from '@/components/Layout.tsx';
-
-// Pages
+import React, { useState } from 'react';
+import { AuthProvider, useAuth } from '@/hooks/useAuth';
+import Login from '@/components/Login';
+import Layout from '@/components/Layout';
 import HomePage from '@/pages/HomePage';
-import ServicesPage from '@/pages/ServicesPage';
-import BookingPage from '@/pages/BookingPage';
-import AppointmentsPage from '@/pages/AppointmentsPage';
-import AdminPage from '@/pages/AdminPage';
-import ProfilePage from '@/pages/ProfilePage';
+import Services from '@/pages/ServicesPage';
+import Booking from '@/pages/BookingPage';
+import MyAppointments from '@/pages/AppointmentsPage';
+import AdminDashboard from '@/pages/AdminPage';
+import Profile from '@/pages/ProfilePage';
+import { ViewType } from '@/types';
 
-import { User } from '@/types';
-import '@/styles/globals.css';
-
-type ViewType = 'home' | 'services' | 'booking' | 'appointments' | 'admin' | 'profile';
-
-const AppContent: React.FC = () => {
-    const { user, loading } = useAuth();
+const AppContent = () => {
+    const { user, isAuthenticated, isLoading } = useAuth();
     const [currentView, setCurrentView] = useState<ViewType>('home');
 
-    // Handle navigation
-    const handleNavigate = (view: ViewType) => {
-        setCurrentView(view);
-    };
-
-    // Show loading screen while checking authentication
-    if (loading) {
+    if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <div className="text-center">
-                    <div
-                        className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
-                        style={{ borderColor: '#a4817a' }}
-                    ></div>
-                    <p className="text-gray-600">Caricamento...</p>
+            <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+                <div className="animate-pulse">
+                    <div className="text-2xl font-bold" style={{ color: '#a4817a' }}>
+                        R Beauty
+                    </div>
                 </div>
             </div>
         );
     }
 
-    // Show login if user is not authenticated
-    if (!user) {
+    if (!isAuthenticated) {
         return <Login />;
     }
 
-    // Render main app content
     const renderCurrentView = () => {
         switch (currentView) {
             case 'home':
-                return <HomePage onNavigate={handleNavigate} />;
-
+                return <HomePage onNavigate={setCurrentView} />;
             case 'services':
-                return <ServicesPage />;
-
+                return <Services />;
             case 'booking':
-                return <BookingPage onNavigate={handleNavigate} />;
-
+                return <Booking onComplete={() => setCurrentView('appointments')}
+                                onNavigate={function (view: string): void {
+                                    throw new Error('Function not implemented.');
+                                }} />;
             case 'appointments':
-                return <AppointmentsPage onNavigate={handleNavigate} />;
-
+                return <MyAppointments onNavigate={function(view: string): void {
+                    throw new Error('Function not implemented.');
+                } } />;
             case 'admin':
-                return user.role === 'admin' ? <AdminPage /> : <HomePage onNavigate={handleNavigate} />;
-
+                return user?.role === 'admin' ? <AdminDashboard /> : <HomePage onNavigate={setCurrentView} />;
             case 'profile':
-                return <ProfilePage />;
-
+                return <Profile />;
             default:
-                return <HomePage onNavigate={handleNavigate} />;
+                return <HomePage onNavigate={setCurrentView} />;
         }
     };
 
     return (
-        <Layout
-            currentView={currentView}
-            onNavigate={handleNavigate}
-            user={user}
-        >
+        <Layout currentView={currentView} onNavigate={setCurrentView} user={user}>
             {renderCurrentView()}
         </Layout>
     );
 };
 
-const App: React.FC = () => {
+const App = () => {
     return (
         <AuthProvider>
-            <ServiceProvider>
-                <AppointmentProvider>
-                    <div className="min-h-screen bg-gray-100">
-                        <AppContent />
-                    </div>
-                </AppointmentProvider>
-            </ServiceProvider>
+            <div className="App">
+                <AppContent />
+            </div>
         </AuthProvider>
     );
 };

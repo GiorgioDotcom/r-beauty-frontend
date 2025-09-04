@@ -1,4 +1,4 @@
-import {ApiResponse, PaginatedResponse} from '@/types';
+import { ApiResponse, PaginatedResponse, Service, Appointment, DashboardStats } from '@/types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -19,7 +19,7 @@ class ApiClient {
         const config: RequestInit = {
             headers: {
                 'Content-Type': 'application/json',
-                ...(token && {Authorization: `Bearer ${token}`}),
+                ...(token && { Authorization: `Bearer ${token}` }),
                 ...options.headers,
             },
             ...options,
@@ -44,7 +44,7 @@ class ApiClient {
     async login(email: string, password: string) {
         return this.request('/auth/login', {
             method: 'POST',
-            body: JSON.stringify({email, password}),
+            body: JSON.stringify({ email, password }),
         });
     }
 
@@ -65,12 +65,38 @@ class ApiClient {
     }
 
     // Services methods
-    async getServices() {
+    async getServices(): Promise<ApiResponse<{ services: Record<string, Service[]> }>> {
         return this.request('/services');
     }
 
-    async getService(id: string) {
+    async getService(id: string): Promise<ApiResponse<Service>> {
         return this.request(`/services/${id}`);
+    }
+
+    async createService(serviceData: {
+        name: string;
+        category: string;
+        description?: string;
+        price: number;
+        duration: number;
+    }) {
+        return this.request('/services', {
+            method: 'POST',
+            body: JSON.stringify(serviceData),
+        });
+    }
+
+    async updateService(id: string, serviceData: Partial<Service>) {
+        return this.request(`/services/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(serviceData),
+        });
+    }
+
+    async deleteService(serviceId: string) {
+        return this.request(`/services/${serviceId}`, {
+            method: 'DELETE',
+        });
     }
 
     // Appointments methods
@@ -90,8 +116,8 @@ class ApiClient {
         });
     }
 
-    async getUserAppointments(page: number = 1, limit: number = 10) {
-        return this.request<PaginatedResponse<any>>(`/appointments/my-appointments?page=${page}&limit=${limit}`);
+    async getUserAppointments(page: number = 1, limit: number = 10): Promise<ApiResponse<PaginatedResponse<Appointment>>> {
+        return this.request(`/appointments/my-appointments?page=${page}&limit=${limit}`);
     }
 
     async cancelAppointment(appointmentId: string) {
@@ -101,7 +127,7 @@ class ApiClient {
     }
 
     // Admin methods
-    async getDashboardStats() {
+    async getDashboardStats(): Promise<ApiResponse<DashboardStats>> {
         return this.request('/admin/dashboard');
     }
 
@@ -110,27 +136,30 @@ class ApiClient {
         limit?: number;
         date?: string;
         status?: string;
-    }) {
+    }): Promise<ApiResponse<PaginatedResponse<Appointment>>> {
         const queryString = params ? new URLSearchParams(params as any).toString() : '';
-        return this.request<PaginatedResponse<any>>(`/admin/appointments?${queryString}`);
+        return this.request(`/admin/appointments?${queryString}`);
     }
 
-    async createService(serviceData: {
-        name: string;
-        category: string;
-        description?: string;
-        price: number;
-        duration: number;
-    }) {
-        return this.request('/services', {
-            method: 'POST',
-            body: JSON.stringify(serviceData),
+    async updateAppointmentStatus(id: string, status: string) {
+        return this.request(`/admin/appointments/${id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status }),
         });
     }
 
-    async deleteService(serviceId: string) {
-        return this.request(`/services/${serviceId}`, {
-            method: 'DELETE',
+    async getAllClients() {
+        return this.request('/admin/clients');
+    }
+
+    async getBusinessSettings() {
+        return this.request('/admin/settings');
+    }
+
+    async updateBusinessSettings(settings: any) {
+        return this.request('/admin/settings', {
+            method: 'PUT',
+            body: JSON.stringify(settings),
         });
     }
 }

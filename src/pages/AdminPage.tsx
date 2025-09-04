@@ -18,7 +18,7 @@ import {
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 
-const AdminPage: React.FC = () => {
+const AdminDashboard: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'dashboard' | 'appointments' | 'services' | 'settings'>('dashboard');
 
     // Modals state
@@ -491,4 +491,4 @@ const AdminPage: React.FC = () => {
     );
 };
 
-export default AdminPage;
+export default AdminDashboard;

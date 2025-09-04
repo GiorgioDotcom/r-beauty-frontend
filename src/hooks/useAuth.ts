@@ -22,16 +22,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const storedToken = localStorage.getItem('r-beauty-token');
         if (storedToken) {
             setToken(storedToken);
-            fetchUserProfile(storedToken);
+            fetchUserProfile();
         } else {
             setIsLoading(false);
         }
     }, []);
 
-    const fetchUserProfile = async (authToken: string) => {
+    const fetchUserProfile = async () => {
         try {
             const response = await apiClient.getProfile();
-            if (response.success) {
+            if (response.success && response.data) {
                 setUser(response.data.user);
             }
         } catch (error) {
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const login = async (email: string, password: string) => {
         try {
             const response = await apiClient.login(email, password);
-            if (response.success) {
+            if (response.success && response.data) {
                 const { token: authToken, user: userData } = response.data;
                 setToken(authToken);
                 setUser(userData);

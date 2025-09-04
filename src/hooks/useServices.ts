@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Service, ServiceCategory } from '@/types';
+import { Service } from '@/types';
 import { apiClient } from '@/services/api';
 
 export const useServices = () => {
@@ -15,7 +15,7 @@ export const useServices = () => {
         try {
             setLoading(true);
             const response = await apiClient.getServices();
-            if (response.success) {
+            if (response.success && response.data) {
                 setServices(response.data.services);
             }
         } catch (err) {
@@ -25,10 +25,55 @@ export const useServices = () => {
         }
     };
 
+    const createService = async (serviceData: {
+        name: string;
+        category: string;
+        description?: string;
+        price: number;
+        duration: number;
+    }) => {
+        try {
+            const response = await apiClient.createService(serviceData);
+            if (response.success) {
+                await fetchServices();
+            }
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    const updateService = async (id: string, serviceData: Partial<Service>) => {
+        try {
+            const response = await apiClient.updateService(id, serviceData);
+            if (response.success) {
+                await fetchServices();
+            }
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    const deleteService = async (id: string) => {
+        try {
+            const response = await apiClient.deleteService(id);
+            if (response.success) {
+                await fetchServices();
+            }
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    };
+
     return {
         services,
         loading,
         error,
         refetch: fetchServices,
+        createService,
+        updateService,
+        deleteService,
     };
 };

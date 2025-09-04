@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Appointment } from '@/types';
+import { Appointment, AppointmentStatus } from '@/types';
 import { apiClient } from '@/services/api';
 
 export const useAppointments = () => {
@@ -8,14 +8,14 @@ export const useAppointments = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchAppointments();
+        fetchUserAppointments();
     }, []);
 
-    const fetchAppointments = async () => {
+    const fetchUserAppointments = async () => {
         try {
             setLoading(true);
             const response = await apiClient.getUserAppointments();
-            if (response.success) {
+            if (response.success && response.data) {
                 setAppointments(response.data.data);
             }
         } catch (err) {
@@ -32,7 +32,7 @@ export const useAppointments = () => {
                 setAppointments(prev =>
                     prev.map(app =>
                         app._id === appointmentId
-                            ? { ...app, status: 'cancelled' as any }
+                            ? { ...app, status: AppointmentStatus.CANCELLED }
                             : app
                     )
                 );
@@ -48,6 +48,7 @@ export const useAppointments = () => {
         loading,
         error,
         cancelAppointment,
-        refetch: fetchAppointments,
+        refetch: fetchUserAppointments,
+        fetchUserAppointments, // Esporto anche con il nome specifico per compatibilità
     };
 };

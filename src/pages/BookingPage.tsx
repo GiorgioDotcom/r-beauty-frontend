@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useAppointments } from '@/hooks/useAppointments.ts';
-import { Service } from '@/types';
-import { BRAND_COLORS } from '@/utils/constants.ts';
-import { Calendar, Clock, CheckCircle } from 'lucide-react';
+import React, {useState, useEffect} from 'react';
+import {useAppointments} from '@/hooks/useAppointments.ts';
+import {Service} from '@/types';
+import {BRAND_COLORS} from '@/utils/constants.ts';
+import {Calendar, Clock, CheckCircle} from 'lucide-react';
 import ServicesPage from './ServicesPage.tsx';
-import { format, addDays, isAfter, isBefore, startOfDay } from 'date-fns';
-import { it } from 'date-fns/locale';
+import {format, addDays, isAfter, isBefore, startOfDay} from 'date-fns';
+import {it} from 'date-fns/locale';
 
 interface BookingPageProps {
-    onNavigate: (view: string) => void;
+    onNavigate: (view: string) => void,
+    onComplete?: () => void
 }
 
-const BookingPage: React.FC<BookingPageProps> = ({ onNavigate }) => {
+const BookingPage: React.FC<BookingPageProps> = ({onNavigate, onComplete}) => {
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [selectedTime, setSelectedTime] = useState<string>('');
@@ -128,20 +129,22 @@ const BookingPage: React.FC<BookingPageProps> = ({ onNavigate }) => {
                         <div className="flex items-center">
                             <div
                                 className="w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                                style={{ backgroundColor: BRAND_COLORS.primary }}
+                                style={{backgroundColor: BRAND_COLORS.primary}}
                             >
                                 1
                             </div>
                             <span className="ml-2 text-sm font-medium">Servizio</span>
                         </div>
                         <div className="flex items-center opacity-50">
-                            <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-white text-sm font-bold">
+                            <div
+                                className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-white text-sm font-bold">
                                 2
                             </div>
                             <span className="ml-2 text-sm">Data</span>
                         </div>
                         <div className="flex items-center opacity-50">
-                            <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-white text-sm font-bold">
+                            <div
+                                className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-white text-sm font-bold">
                                 3
                             </div>
                             <span className="ml-2 text-sm">Orario</span>
@@ -185,18 +188,18 @@ const BookingPage: React.FC<BookingPageProps> = ({ onNavigate }) => {
                             key={date.toISOString()}
                             onClick={() => handleDateSelect(format(date, 'yyyy-MM-dd'))}
                             className="w-full p-4 text-left border rounded-lg hover:bg-gray-50 transition-colors"
-                            style={{ borderColor: '#d4b5a3' }}
+                            style={{borderColor: '#d4b5a3'}}
                         >
                             <div className="flex justify-between items-center">
                                 <div>
                                     <div className="font-medium">
-                                        {format(date, 'EEEE d MMMM', { locale: it })}
+                                        {format(date, 'EEEE d MMMM', {locale: it})}
                                     </div>
                                     <div className="text-sm text-gray-600">
                                         {format(date, 'yyyy')}
                                     </div>
                                 </div>
-                                <Calendar size={20} style={{ color: BRAND_COLORS.primary }} />
+                                <Calendar size={20} style={{color: BRAND_COLORS.primary}}/>
                             </div>
                         </button>
                     ))}
@@ -224,7 +227,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ onNavigate }) => {
                 >
                     <h3 className="font-medium text-gray-800">{selectedService?.name}</h3>
                     <p className="text-sm text-gray-600">
-                        {format(new Date(selectedDate), 'EEEE d MMMM yyyy', { locale: it })}
+                        {format(new Date(selectedDate), 'EEEE d MMMM yyyy', {locale: it})}
                     </p>
                 </div>
 
@@ -241,9 +244,9 @@ const BookingPage: React.FC<BookingPageProps> = ({ onNavigate }) => {
                                     key={time}
                                     onClick={() => handleTimeSelect(time)}
                                     className="p-3 border rounded-lg text-sm font-medium transition-colors hover:bg-gray-50"
-                                    style={{ borderColor: '#d4b5a3' }}
+                                    style={{borderColor: '#d4b5a3'}}
                                 >
-                                    <Clock size={16} className="inline mr-2" />
+                                    <Clock size={16} className="inline mr-2"/>
                                     {time}
                                 </button>
                             ))}
@@ -275,7 +278,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ onNavigate }) => {
                     }}
                 >
                     <h3 className="font-semibold text-gray-700 mb-3 flex items-center">
-                        <CheckCircle size={20} className="mr-2" style={{ color: BRAND_COLORS.primary }} />
+                        <CheckCircle size={20} className="mr-2" style={{color: BRAND_COLORS.primary}}/>
                         Riepilogo Prenotazione
                     </h3>
 
@@ -287,7 +290,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ onNavigate }) => {
                         <div className="flex justify-between">
                             <span>Data:</span>
                             <span className="font-medium">
-                {format(new Date(selectedDate), 'EEEE d MMMM yyyy', { locale: it })}
+                {format(new Date(selectedDate), 'EEEE d MMMM yyyy', {locale: it})}
               </span>
                         </div>
                         <div className="flex justify-between">

@@ -1,4 +1,3 @@
-// Mantieni consistenza con il backend
 export interface User {
     _id: string;
     name: string;
@@ -80,3 +79,14 @@ export interface PaginatedResponse<T> {
     hasNext: boolean;
     hasPrev: boolean;
 }
+
+export interface DashboardStats {
+    todayAppointments: number;
+    thisMonthAppointments: number;
+    totalClients: number;
+    totalServices: number;
+    monthlyRevenue: number;
+}
+
+// Type per la navigazione
+export type ViewType = 'home' | 'services' | 'booking' | 'appointments' | 'admin' | 'profile';
