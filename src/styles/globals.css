@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #a4817a;
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #8a6b5e;
+}
+
+/* Focus styles for accessibility */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #a4817a;
+    ring-opacity: 0.5;
+}
+
+/* Custom button focus */
+button:focus {
+    outline: 2px solid #a4817a;
+    outline-offset: 2px;
+}
+
+/* Loading animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom brand colors */
+.text-brand-primary {
+    color: #a4817a;
+}
+
+.bg-brand-primary {
+    background-color: #a4817a;
+}
+
+.border-brand-primary {
+    border-color: #a4817a;
+}
+
+/* Mobile-first responsive design */
+.mobile-container {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* Date picker custom styles */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #a4817a;
+    cursor: pointer;
+}
+
+/* Custom gradient backgrounds */
+.gradient-brand {
+    background: linear-gradient(135deg, #b5938a 0%, #a4817a 100%);
+}
+
+.gradient-brand-light {
+    background: linear-gradient(135deg, rgba(181, 147, 138, 0.1) 0%, rgba(164, 129, 122, 0.1) 100%);
+}
