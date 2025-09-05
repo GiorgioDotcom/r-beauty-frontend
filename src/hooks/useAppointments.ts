@@ -6,6 +6,7 @@ export const useAppointments = () => {
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [availableSlots, setAvailableSlots] = useState<string[]>([]);
 
     useEffect(() => {
         fetchUserAppointments();
@@ -22,6 +23,60 @@ export const useAppointments = () => {
             setError(err instanceof Error ? err.message : 'Failed to fetch appointments');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchAllAppointments = async (params?: {
+        page?: number;
+        limit?: number;
+        date?: string;
+        status?: string;
+    }) => {
+        try {
+            setLoading(true);
+            const response = await apiClient.getAllAppointments(params);
+            if (response.success && response.data) {
+                setAppointments(response.data.data);
+                return response.data;
+            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to fetch all appointments');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getAvailableSlots = async (date: string, serviceId: string) => {
+        try {
+            const response = await apiClient.getAvailableSlots(date, serviceId);
+            if (response.success && response.data) {
+                // @ts-ignore
+                const slots = response.data.availableSlots || [];
+                setAvailableSlots(slots);
+                return slots;
+            }
+            return [];
+        } catch (err) {
+            console.error('Failed to fetch available slots:', err);
+            throw err;
+        }
+    };
+
+    const createAppointment = async (appointmentData: {
+        serviceId: string;
+        date: string;
+        startTime: string;
+        notes?: string;
+    }) => {
+        try {
+            const response = await apiClient.createAppointment(appointmentData);
+            if (response.success) {
+                await fetchUserAppointments();
+                return response;
+            }
+        } catch (err) {
+            console.error('Failed to create appointment:', err);
+            throw err;
         }
     };
 
@@ -43,12 +98,36 @@ export const useAppointments = () => {
         }
     };
 
+    const updateAppointmentStatus = async (appointmentId: string, status: string) => {
+        try {
+            const response = await apiClient.updateAppointmentStatus(appointmentId, status);
+            if (response.success) {
+                setAppointments(prev =>
+                    prev.map(app =>
+                        app._id === appointmentId
+                            ? { ...app, status: status as AppointmentStatus }
+                            : app
+                    )
+                );
+            }
+            return response;
+        } catch (err) {
+            console.error('Failed to update appointment status:', err);
+            throw err;
+        }
+    };
+
     return {
         appointments,
         loading,
         error,
+        availableSlots,
         cancelAppointment,
         refetch: fetchUserAppointments,
-        fetchUserAppointments, // Esporto anche con il nome specifico per compatibilità
+        fetchUserAppointments,
+        fetchAllAppointments,
+        getAvailableSlots,
+        createAppointment,
+        updateAppointmentStatus,
     };
 };

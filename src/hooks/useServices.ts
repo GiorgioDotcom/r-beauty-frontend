@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Service } from '@/types';
+import { Service, ServiceCategory } from '@/types';
 import { apiClient } from '@/services/api';
 
 export const useServices = () => {
@@ -67,6 +67,23 @@ export const useServices = () => {
         }
     };
 
+    // Helper per ottenere tutti i servizi come array flat
+    const getAllServicesFlat = (): Service[] => {
+        return Object.values(services).flat();
+    };
+
+    // Helper per ottenere servizi per categoria
+    const getServicesByCategory = (category: ServiceCategory | string): Service[] => {
+        return services[category] || [];
+    };
+
+    // Helper per contare totale servizi
+    const getTotalServicesCount = (): number => {
+        return Object.values(services).reduce((total, categoryServices) => {
+            return total + categoryServices.length;
+        }, 0);
+    };
+
     return {
         services,
         loading,
@@ -75,5 +92,8 @@ export const useServices = () => {
         createService,
         updateService,
         deleteService,
+        getAllServicesFlat,
+        getServicesByCategory,
+        getTotalServicesCount,
     };
 };

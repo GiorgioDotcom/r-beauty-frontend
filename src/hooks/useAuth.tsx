@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { User } from '@/types';
 import { apiClient } from '@/services/api';
 
@@ -13,10 +13,31 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    const logout = () => {
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem('r-beauty-token');
+    };
+
+    const fetchUserProfile = async () => {
+        try {
+            const response = await apiClient.getProfile();
+            if (response.success && response.data) {
+                // @ts-ignore
+                setUser(response.data.user);
+            }
+        } catch (error) {
+            console.error('Failed to fetch user profile:', error);
+            logout();
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         const storedToken = localStorage.getItem('r-beauty-token');
@@ -28,24 +49,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    const fetchUserProfile = async () => {
-        try {
-            const response = await apiClient.getProfile();
-            if (response.success && response.data) {
-                setUser(response.data.user);
-            }
-        } catch (error) {
-            console.error('Failed to fetch user profile:', error);
-            logout();
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const login = async (email: string, password: string) => {
         try {
             const response = await apiClient.login(email, password);
             if (response.success && response.data) {
+                // @ts-ignore
                 const { token: authToken, user: userData } = response.data;
                 setToken(authToken);
                 setUser(userData);
@@ -57,13 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const logout = () => {
-        setUser(null);
-        setToken(null);
-        localStorage.removeItem('r-beauty-token');
-    };
-
-    const value = {
+    const value: AuthContextType = {
         user,
         token,
         login,
