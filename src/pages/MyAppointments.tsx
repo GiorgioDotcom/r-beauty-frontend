@@ -1,10 +1,6 @@
 import React from 'react';
 
-interface MyAppointmentsProps {
-    onNavigate?: (view: string) => void
-}
-
-const MyAppointments: React.FC = ({onNavigate}: MyAppointmentsProps) => {
+const MyAppointments: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto">

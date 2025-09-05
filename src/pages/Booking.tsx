@@ -1,11 +1,10 @@
 import React from 'react';
 
 interface BookingProps {
-    onComplete: () => void,
-    onNavigate?: (view: string) => void
+    onComplete: () => void;
 }
 
-const Booking: React.FC<BookingProps> = ({onComplete, onNavigate}) => {
+const Booking: React.FC<BookingProps> = ({ onComplete }) => {
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto">

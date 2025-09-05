@@ -70,25 +70,46 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-100 flex items-center justify-center p-4">
+        <div className="min-h-screen flex items-center justify-center p-4" style={{
+            background: 'linear-gradient(135deg, #f5f1f0 0%, #e8ddd9 30%, #d4c4bf 70%, #c9a876 100%)'
+        }}>
             <div className="max-w-md w-full">
                 {/* Logo/Brand */}
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-2">R Beauty</h1>
-                    <p className="text-gray-600">Il tuo centro di bellezza</p>
+                <div className="text-center mb-12">
+                    <div className="flex justify-center mb-6">
+                        <div className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg" style={{
+                            background: 'linear-gradient(45deg, #c9a876, #e6d5a8)',
+                            boxShadow: '0 8px 30px rgba(201, 168, 118, 0.4)'
+                        }}>
+                            <span className="text-3xl text-white">🦋</span>
+                        </div>
+                    </div>
+                    <h1 className="text-5xl font-bold mb-3" style={{
+                        background: 'linear-gradient(45deg, #a4817a, #c9a876)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        fontFamily: 'serif'
+                    }}>
+                        R Beauty
+                    </h1>
+                    <p className="text-gray-600 text-lg">Il tuo centro di bellezza</p>
                 </div>
 
                 {/* Form Container */}
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                    <div className="mb-6">
-                        <h2 className="text-2xl font-semibold text-center text-gray-800">
-                            {isLogin ? 'Accedi al tuo account' : 'Crea un account'}
+                <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl p-10 border border-rose-100">
+                    <div className="mb-8">
+                        <h2 className="text-2xl font-semibold text-center" style={{ color: '#a4817a' }}>
+                            {isLogin ? 'Bentornata' : 'Unisciti a noi'}
                         </h2>
+                        <p className="text-center text-gray-600 mt-2">
+                            {isLogin ? 'Accedi al tuo account' : 'Crea il tuo account'}
+                        </p>
+                        <div className="w-16 h-0.5 bg-gradient-to-r from-rose-300 to-amber-200 mx-auto mt-4"></div>
                     </div>
 
                     {/* Error Message */}
                     {error && (
-                        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
                             {error}
                         </div>
                     )}
@@ -96,8 +117,8 @@ const Login = () => {
                     {/* Form */}
                     <form onSubmit={isLogin ? handleLogin : handleRegister}>
                         {!isLogin && (
-                            <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                            <div className="mb-6">
+                                <label htmlFor="name" className="block text-sm font-medium mb-2" style={{ color: '#a4817a' }}>
                                     Nome completo
                                 </label>
                                 <input
@@ -107,14 +128,15 @@ const Login = () => {
                                     value={formData.name}
                                     onChange={handleInputChange}
                                     required={!isLogin}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                                    className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition-all duration-200"
                                     placeholder="Il tuo nome"
+                                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}
                                 />
                             </div>
                         )}
 
-                        <div className="mb-4">
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        <div className="mb-6">
+                            <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#a4817a' }}>
                                 Email
                             </label>
                             <input
@@ -124,13 +146,14 @@ const Login = () => {
                                 value={formData.email}
                                 onChange={handleInputChange}
                                 required
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition-all duration-200"
                                 placeholder="cviao@gmail.com"
+                                style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}
                             />
                         </div>
 
-                        <div className="mb-4">
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                        <div className="mb-6">
+                            <label htmlFor="password" className="block text-sm font-medium mb-2" style={{ color: '#a4817a' }}>
                                 Password
                             </label>
                             <input
@@ -140,14 +163,15 @@ const Login = () => {
                                 value={formData.password}
                                 onChange={handleInputChange}
                                 required
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition-all duration-200"
                                 placeholder="••••••••"
+                                style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}
                             />
                         </div>
 
                         {!isLogin && (
-                            <div className="mb-6">
-                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                            <div className="mb-8">
+                                <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: '#a4817a' }}>
                                     Telefono (opzionale)
                                 </label>
                                 <input
@@ -156,8 +180,9 @@ const Login = () => {
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                                    className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition-all duration-200"
                                     placeholder="+39 123 456 7890"
+                                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}
                                 />
                             </div>
                         )}
@@ -165,7 +190,12 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-rose-600 text-white py-2 px-4 rounded-md hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200"
+                            className="w-full py-4 px-6 rounded-xl text-white font-semibold shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-rose-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-0.5"
+                            style={{
+                                background: isLoading
+                                    ? 'linear-gradient(135deg, #d1d5db, #9ca3af)'
+                                    : 'linear-gradient(135deg, #a4817a, #c9a876)',
+                            }}
                         >
                             {isLoading ? (
                                 <span className="flex items-center justify-center">
@@ -176,32 +206,43 @@ const Login = () => {
                                     {isLogin ? 'Accedendo...' : 'Registrando...'}
                                 </span>
                             ) : (
-                                isLogin ? 'Accedi' : 'Registrati'
+                                <span className="flex items-center justify-center">
+                                    {isLogin ? 'Accedi ✨' : 'Registrati 🦋'}
+                                </span>
                             )}
                         </button>
                     </form>
 
                     {/* Toggle between login/register */}
-                    <div className="mt-6 text-center">
+                    <div className="mt-8 text-center">
                         <p className="text-gray-600">
-                            {isLogin ? 'Non hai un account?' : 'Hai già un account?'}
+                            {isLogin ? 'Non hai ancora un account?' : 'Hai già un account?'}
                             <button
                                 type="button"
                                 onClick={toggleMode}
-                                className="ml-2 text-rose-600 hover:text-rose-700 font-medium"
+                                className="ml-2 font-medium transition-all duration-200 hover:underline"
+                                style={{ color: '#a4817a' }}
                             >
-                                {isLogin ? 'Registrati' : 'Accedi'}
+                                {isLogin ? 'Registrati qui' : 'Accedi qui'}
                             </button>
                         </p>
                     </div>
                 </div>
 
                 {/* Demo credentials */}
-                <div className="mt-6 bg-blue-50 rounded-lg p-4">
-                    <h3 className="text-sm font-medium text-blue-800 mb-2">Credenziali di test:</h3>
-                    <div className="text-sm text-blue-700">
-                        <p><strong>Admin:</strong> admin@rbeauty.it / admin123</p>
-                        <p><strong>Cliente:</strong> maria@esempio.it / client123</p>
+                <div className="mt-8 bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-rose-100">
+                    <h3 className="text-sm font-medium mb-4 text-center" style={{ color: '#a4817a' }}>
+                        🔑 Credenziali di test
+                    </h3>
+                    <div className="text-sm text-gray-700 space-y-2">
+                        <div className="bg-white/50 p-3 rounded-lg">
+                            <p><span className="font-medium">Admin:</span> admin@rbeauty.it</p>
+                            <p><span className="font-medium">Password:</span> admin123</p>
+                        </div>
+                        <div className="bg-white/50 p-3 rounded-lg">
+                            <p><span className="font-medium">Cliente:</span> maria@esempio.it</p>
+                            <p><span className="font-medium">Password:</span> client123</p>
+                        </div>
                     </div>
                 </div>
             </div>
