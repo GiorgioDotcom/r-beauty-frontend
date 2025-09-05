@@ -2,20 +2,17 @@ import React from 'react';
 
 const MyAppointments: React.FC = () => {
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
-            <div className="max-w-4xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-800 mb-8">
-                    I Miei Appuntamenti
-                </h1>
+        <div className="p-4 space-y-6">
+            <h2 className="text-xl font-bold text-gray-800">I Miei Appuntamenti</h2>
 
-                <div className="bg-white p-8 rounded-lg shadow-md">
-                    <p className="text-gray-600 mb-4">
-                        Qui vedrai tutti i tuoi appuntamenti.
-                    </p>
-                    <p className="text-sm text-gray-500">
-                        Componente in sviluppo...
-                    </p>
-                </div>
+            <div className="text-center py-8">
+                <p className="text-gray-500 mb-4">Non hai ancora prenotazioni</p>
+                <button
+                    className="text-white px-6 py-2 rounded-lg hover:opacity-90 transition-colors"
+                    style={{backgroundColor: '#a4817a'}}
+                >
+                    Prenota Ora
+                </button>
             </div>
         </div>
     );

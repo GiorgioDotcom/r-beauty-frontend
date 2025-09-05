@@ -6,26 +6,23 @@ interface BookingProps {
 
 const Booking: React.FC<BookingProps> = ({ onComplete }) => {
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
-            <div className="max-w-4xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-800 mb-8">
-                    Prenota Appuntamento
-                </h1>
+        <div className="p-4 space-y-6">
+            <h2 className="text-xl font-bold text-gray-800">Prenota il tuo Servizio</h2>
 
-                <div className="bg-white p-8 rounded-lg shadow-md">
-                    <p className="text-gray-600 mb-4">
-                        Qui potrai prenotare il tuo appuntamento.
-                    </p>
-                    <button
-                        onClick={onComplete}
-                        className="bg-rose-600 text-white px-4 py-2 rounded hover:bg-rose-700"
-                    >
-                        Torna ai miei appuntamenti
-                    </button>
-                    <p className="text-sm text-gray-500 mt-4">
-                        Componente in sviluppo...
-                    </p>
-                </div>
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <p className="text-gray-600 mb-4">
+                    Sistema di prenotazione in arrivo.
+                </p>
+                <button
+                    onClick={onComplete}
+                    className="w-full text-white p-4 rounded-xl font-medium hover:opacity-90 transition-colors"
+                    style={{backgroundColor: '#a4817a'}}
+                >
+                    Torna ai miei appuntamenti
+                </button>
+                <p className="text-sm mt-4" style={{ color: '#a4817a' }}>
+                    Componente in sviluppo...
+                </p>
             </div>
         </div>
     );

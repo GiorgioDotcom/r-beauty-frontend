@@ -1,44 +1,37 @@
 import React from 'react';
+import { Settings, Plus, Ban } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
-            <div className="max-w-6xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-800 mb-8">
-                    Dashboard Amministratore
-                </h1>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                            Appuntamenti Oggi
-                        </h2>
-                        <p className="text-3xl font-bold text-rose-600">0</p>
-                    </div>
-
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                            Clienti Totali
-                        </h2>
-                        <p className="text-3xl font-bold text-rose-600">0</p>
-                    </div>
-
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                            Servizi Attivi
-                        </h2>
-                        <p className="text-3xl font-bold text-rose-600">0</p>
-                    </div>
+        <div className="p-4 space-y-6">
+            <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold text-gray-800">Gestione Centro</h2>
+                <div className="flex space-x-2">
+                    <button
+                        className="text-white px-3 py-2 rounded-lg text-sm hover:opacity-90 transition-colors"
+                        style={{backgroundColor: '#a4817a'}}
+                    >
+                        <Plus size={16} className="inline mr-1" />
+                        Servizio
+                    </button>
+                    <button
+                        className="text-white px-3 py-2 rounded-lg text-sm hover:opacity-90 transition-colors"
+                        style={{backgroundColor: '#6b7280'}}
+                    >
+                        <Ban size={16} className="inline mr-1" />
+                        Chiudi
+                    </button>
                 </div>
+            </div>
 
-                <div className="bg-white p-8 rounded-lg shadow-md mt-6">
-                    <p className="text-gray-600 mb-4">
-                        Dashboard amministratore completa in arrivo.
-                    </p>
-                    <p className="text-sm text-gray-500">
-                        Componente in sviluppo...
-                    </p>
-                </div>
+            <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <h3 className="font-semibold text-gray-700 mb-3">Dashboard Amministratore</h3>
+                <p className="text-gray-600 mb-4">
+                    Pannello di controllo per gestire servizi e prenotazioni.
+                </p>
+                <p className="text-sm" style={{ color: '#a4817a' }}>
+                    Componente in sviluppo...
+                </p>
             </div>
         </div>
     );
