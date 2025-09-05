@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import Login from '@/components/Login';
 import Layout from '@/components/Layout';
-import HomePage from '@/pages/HomePage';
-import Services from '@/pages/ServicesPage';
-import Booking from '@/pages/BookingPage';
-import {MyAppointments} from '@/pages/AppointmentsPage';
-import {AdminDashboard} from '@/pages/AdminPage';
-import Profile from '@/pages/ProfilePage';
+import Home from '@/pages/Home.tsx';
+import Services from '@/pages/Services.tsx';
+import Booking from '@/pages/Booking.tsx';
+import MyAppointments from "@/pages/MyAppointments.tsx";
+import AdminDashboard from '@/pages/AdminDashboard.tsx';
+import Profile from '@/pages/Profile.tsx';
 import { ViewType } from '@/types';
 
 const AppContent = () => {
@@ -33,27 +33,19 @@ const AppContent = () => {
     const renderCurrentView = () => {
         switch (currentView) {
             case 'home':
-                return <HomePage onNavigate={setCurrentView} />;
+                return <Home onNavigate={setCurrentView} />;
             case 'services':
-                // @ts-ignore
                 return <Services />;
             case 'booking':
-                // @ts-ignore
-                return <Booking onComplete={() => setCurrentView('appointments')}
-                                onNavigate={function (view: string): void {
-                                    throw new Error('Function not implemented.');
-                                }} />;
+                return <Booking onComplete={() => setCurrentView('appointments')} />;
             case 'appointments':
-                // @ts-ignore
-                return <MyAppointments onNavigate={function(view: string): void {
-                    throw new Error('Function not implemented.');
-                } } />;
+                return <MyAppointments />; // Rimosso onNavigate
             case 'admin':
-                return user?.role === 'admin' ? <AdminDashboard /> : <HomePage onNavigate={setCurrentView} />;
+                return user?.role === 'admin' ? <AdminDashboard /> : <Home onNavigate={setCurrentView} />;
             case 'profile':
                 return <Profile />;
             default:
-                return <HomePage onNavigate={setCurrentView} />;
+                return <Home onNavigate={setCurrentView} />;
         }
     };
 

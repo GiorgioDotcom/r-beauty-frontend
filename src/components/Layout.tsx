@@ -1,95 +1,83 @@
 import React from 'react';
-import { User } from '@/types';
+import {User, ViewType} from '@/types';
 import { useAuth } from '@/hooks/useAuth';
-import { BRAND_COLORS } from '@/utils/constants';
-import {
-    Home,
-    Calendar,
-    Scissors,
-    User as UserIcon,
-    LogOut,
-    Shield,
-    BookOpen
-} from 'lucide-react';
-
-type ViewType = 'home' | 'services' | 'booking' | 'appointments' | 'admin' | 'profile';
 
 interface LayoutProps {
     children: React.ReactNode;
-    currentView: ViewType;
-    onNavigate: (view: ViewType) => void;
+    currentView: string;
+    onNavigate: (view: string) => void;
     user: User | null;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate, user }) => {
     const { logout } = useAuth();
 
-    // Mobile-optimized navigation items
     const navigationItems = [
-        { key: 'home', label: 'Home', icon: Home },
-        { key: 'booking', label: 'Prenota', icon: Calendar },
-        { key: 'appointments', label: 'Le Mie', icon: BookOpen },
-        ...(user?.role === 'admin' ? [{ key: 'admin', label: 'Admin', icon: Shield }] : []),
-        { key: 'profile', label: 'Profilo', icon: UserIcon },
-    ] as const;
+        { id: 'home', label: 'Home', icon: '🏠' },
+        { id: 'services', label: 'Servizi', icon: '💄' },
+        { id: 'booking', label: 'Prenota', icon: '📅' },
+        { id: 'appointments', label: 'Appuntamenti', icon: '📋' },
+        ...(user?.role === 'admin' ? [{ id: 'admin', label: 'Admin', icon: '⚙️' }] : []),
+        { id: 'profile', label: 'Profilo', icon: '👤' },
+    ];
 
     return (
-        <div className="min-h-screen bg-gray-100 max-w-md mx-auto">
-            {/* Mobile Header */}
-            <header
-                className="text-white p-4 shadow-lg"
-                style={{background: 'linear-gradient(to right, #b5938a, #a4817a)'}}
-            >
-                <div className="flex items-center justify-between">
-                    <div
-                        className="flex items-center space-x-2 cursor-pointer"
-                        onClick={() => onNavigate('home')}
-                    >
-                        <div className="text-2xl font-bold">R</div>
-                        <div className="text-lg font-light">BEAUTY</div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <span className="text-sm truncate max-w-20">{user?.name}</span>
-                        <button
-                            onClick={logout}
-                            className="px-3 py-1 rounded-full text-sm transition-colors hover:opacity-80"
-                            style={{backgroundColor: 'rgba(255,255,255,0.2)'}}
-                        >
-                            Esci
-                        </button>
+        <div className="min-h-screen bg-gray-100">
+            {/* Header */}
+            <header className="bg-white shadow-sm border-b">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center h-16">
+                        {/* Logo */}
+                        <div className="flex items-center">
+                            <h1 className="text-2xl font-bold" style={{ color: '#a4817a' }}>
+                                R Beauty
+                            </h1>
+                        </div>
+
+                        {/* User Info */}
+                        <div className="flex items-center space-x-4">
+                            <span className="text-gray-700">
+                                Ciao, {user?.name}
+                            </span>
+                            <button
+                                onClick={logout}
+                                className="text-gray-500 hover:text-gray-700 text-sm"
+                            >
+                                Esci
+                            </button>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            {/* Main Content */}
-            <main className="pb-20">
-                {children}
-            </main>
-
-            {/* Bottom Navigation - Mobile */}
-            <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md">
-                <nav className="bg-white border-t border-gray-200 p-2">
-                    <div className="flex justify-around">
-                        {navigationItems.map(({ key, label, icon: Icon }) => (
-                            <button
-                                key={key}
-                                onClick={() => onNavigate(key as ViewType)}
-                                className={`flex flex-col items-center p-2 rounded-lg transition-all ${
-                                    currentView === key
-                                        ? 'text-current'
-                                        : 'text-gray-500'
-                                }`}
-                                style={currentView === key ? {
-                                    color: BRAND_COLORS.primary,
-                                    backgroundColor: 'rgba(164, 129, 122, 0.1)'
-                                } : {}}
-                            >
-                                <Icon size={20} />
-                                <span className="text-xs mt-1">{label}</span>
-                            </button>
-                        ))}
+            <div className="flex">
+                {/* Sidebar Navigation */}
+                <nav className="w-64 bg-white shadow-sm h-screen">
+                    <div className="p-4">
+                        <ul className="space-y-2">
+                            {navigationItems.map((item) => (
+                                <li key={item.id}>
+                                    <button
+                                        onClick={() => onNavigate(item.id as ViewType)}
+                                        className={`w-full flex items-center px-4 py-2 text-left rounded-lg transition-colors ${
+                                            currentView === item.id
+                                                ? 'bg-rose-100 text-rose-800'
+                                                : 'text-gray-700 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        <span className="mr-3">{item.icon}</span>
+                                        {item.label}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </nav>
+
+                {/* Main Content */}
+                <main className="flex-1">
+                    {children}
+                </main>
             </div>
         </div>
     );

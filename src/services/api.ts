@@ -1,12 +1,13 @@
-import { ApiResponse, PaginatedResponse, Service, Appointment, DashboardStats } from '@/types';
+import { ApiResponse, PaginatedResponse, Service, Appointment, DashboardStats, User } from '@/types';
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 class ApiClient {
     private baseURL: string;
 
     constructor(baseURL: string = API_BASE_URL) {
         this.baseURL = baseURL;
+        console.log('API Base URL:', this.baseURL); // Debug log
     }
 
     private async request<T>(
@@ -26,22 +27,27 @@ class ApiClient {
         };
 
         try {
+            console.log('Fetching:', url); // Debug log
             const response = await fetch(url, config);
-            const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || `HTTP error! status: ${response.status}`);
+                const errorData = await response.json().catch(() => null);
+                throw new Error(errorData?.message || `HTTP error! status: ${response.status}`);
             }
 
+            const data = await response.json();
             return data;
         } catch (error) {
             console.error('API request failed:', error);
+            if (error instanceof TypeError && error.message === 'Failed to fetch') {
+                throw new Error('Impossibile connettersi al server. Assicurati che il backend sia attivo sulla porta 5001.');
+            }
             throw error;
         }
     }
 
     // Auth methods
-    async login(email: string, password: string) {
+    async login(email: string, password: string): Promise<ApiResponse<{ token: string; user: User }>> {
         return this.request('/auth/login', {
             method: 'POST',
             body: JSON.stringify({ email, password }),
@@ -53,14 +59,14 @@ class ApiClient {
         email: string;
         password: string;
         phone?: string;
-    }) {
+    }): Promise<ApiResponse<{ token: string; user: User }>> {
         return this.request('/auth/register', {
             method: 'POST',
             body: JSON.stringify(userData),
         });
     }
 
-    async getProfile() {
+    async getProfile(): Promise<ApiResponse<{ user: User }>> {
         return this.request('/auth/me');
     }
 
